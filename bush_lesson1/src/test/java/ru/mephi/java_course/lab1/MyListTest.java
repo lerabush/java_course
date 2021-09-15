@@ -1,3 +1,5 @@
+package ru.mephi.java_course.lab1;
+
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import ru.mephi.java_course.lab1.MyList;
