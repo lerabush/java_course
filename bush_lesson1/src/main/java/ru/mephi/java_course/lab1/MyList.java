@@ -1,7 +1,18 @@
 package ru.mephi.java_course.lab1;
 
+import java.util.Arrays;
+
 public class MyList {
+    public Object[] getItems() {
+        return items;
+    }
+
+    public void setItems(Object[] items) {
+        this.items = items;
+    }
+
     private Object[] items;
+
 
     public MyList(Object[] newItems) {
         this.items = newItems;
@@ -64,8 +75,8 @@ public class MyList {
     }
 
     //get index of item: if list contains it, return index of its first occurrence in list
-    public int getIndexOf(Object value)  {
-
+    public int getIndexOf(Object value) throws Exception{
+        checkValue(value);
         for (int i = 0; i < this.items.length; i++) {
             if (items[i] == value) return i;
         }
@@ -79,8 +90,8 @@ public class MyList {
 
     //check if list is empty
     public boolean isEmpty() {
-        for(int i=0;i<size();i++){
-            if(items[i]!=null) return false;
+        for (int i = 0; i < size(); i++) {
+            if (items[i] != null) return false;
         }
         return true;
     }
@@ -121,4 +132,12 @@ public class MyList {
     }
 
 
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for(int i=0;i<size();i++){
+            builder.append(items[i]+"\n");
+        }
+        return builder.toString();
+    }
 }

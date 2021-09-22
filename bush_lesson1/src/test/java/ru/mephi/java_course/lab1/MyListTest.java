@@ -22,7 +22,7 @@ public class MyListTest {
     public void setUp() {
         Object[] testList1 = {"hello", "world!", "Java"};
         list = new MyList(testList1);
-    }
+    }//выполняется до каждого теста
 
     @Test
     public void whenGettingSize() {
@@ -98,9 +98,11 @@ public class MyListTest {
     }
 
     @Test
-    public void whenGetIndexOfValue(){
+    public void whenGetIndexOfValue() throws Exception {
         assertThat("Returned index should be 2!", list.getIndexOf("Java"), is(2));
         assertThat("Returned index should be -1 because element does not exist!", list.getIndexOf("cat"), is(-1));
+        thrown.expect(NullPointerException.class);
+        list.getIndexOf(null);
     }
     @Test
     public void whenMakeBigger(){
@@ -111,7 +113,7 @@ public class MyListTest {
     @After
     public void afterMethod() {
         System.out.println("OK");
-    }
+    }//выполняется после каждого теста
     @AfterClass
     public static void tearDown() {
         System.out.println("Tests finished");
