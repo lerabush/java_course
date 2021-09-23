@@ -1,5 +1,7 @@
 package ru.mephi.java_course.lab1;
 
+import java.util.Objects;
+
 public class MyMap {
     private MyList list;
 
@@ -29,8 +31,18 @@ public class MyMap {
         }
 
         @Override
+        public boolean equals(Object obj) {
+            return this.key == ((MapEntry) obj).key && this.value == ((MapEntry) obj).value;
+        }
+
+        @Override
         public String toString() {
             return "[ " + this.key + ": " + this.value + " ]";
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(key, value);
         }
     }
 
@@ -50,8 +62,8 @@ public class MyMap {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        for(Object keyItem:list.getItems()){
-            builder.append(((MapEntry)keyItem).toString()+"\n");
+        for (Object keyItem : list.getItems()) {
+            builder.append(((MapEntry) keyItem).toString() + "\n");
         }
         return builder.toString();
     }
@@ -65,8 +77,8 @@ public class MyMap {
     }
 
     //получить все ключи
-    public MyList getKeys() throws Exception {
-        MyList keysList = new MyList(0);
+    public MyList getKeys() {
+        MyList keysList = new MyList();
         for (Object keyItem : list.getItems()) {
             if (keyItem instanceof MapEntry) {
                 keysList.add(((MapEntry) keyItem).getKey());
@@ -76,8 +88,8 @@ public class MyMap {
     }
 
     //получить все значения
-    public MyList getValues() throws Exception {
-        MyList valuesList = new MyList(0);
+    public MyList getValues() {
+        MyList valuesList = new MyList();
         for (Object valueItem : this.list.getItems()) {
             if (((MapEntry) valueItem).getValue() != null) {
                 valuesList.add(((MapEntry) valueItem).getValue());
@@ -92,44 +104,47 @@ public class MyMap {
     }
 
     //существует ли ключ
-    public boolean keyContains(Object key) throws Exception {
+    public boolean keyContains(Object key) {
         return getKeys().contains(key);
     }
+
     //получение по ключу
-    public Object get(Object key) throws Exception {
+    public Object get(Object key) {
         if (keyContains(key)) {
-            int indexOfValue = getKeys().getIndexOf(key);
-            return getValues().getByIndex(indexOfValue);
+            int indexOfValue = getKeys().indexOf(key);
+            return getValues().get(indexOfValue);
         }
         return null;
     }
+
     //кладем новое значение или переписываем существующее
-    public void put(Object key, Object value) throws Exception {
+    public void put(Object key, Object value) {
         if (keyContains(key)) {
-            int indexOfValue = getKeys().getIndexOf(key);
-            ((MapEntry) list.getByIndex(indexOfValue)).setValue(value);
+            int indexOfValue = getKeys().indexOf(key);
+            ((MapEntry) list.get(indexOfValue)).setValue(value);
         } else {
             MapEntry newEntry = new MapEntry(key, value);
             list.add(newEntry);
         }
     }
+
     //удаляем существующее значение
-    public Object remove(Object key) throws Exception {
+    public Object remove(Object key) {
         if (keyContains(key)) {
-            int indexOfValue = getKeys().getIndexOf(key);
+            int indexOfValue = getKeys().indexOf(key);
             Object deletedItem = get(key);
             list.remove(indexOfValue);
             return deletedItem;
         }
         return null;
     }
+
     //получаем существующее значение. если null - то кладем и возвращаем дефолтное значение
-    public Object get(Object key, Object byDefault) throws Exception {
+    public Object get(Object key, Object byDefault) {
         if (get(key) != null) return get(key);
 
         put(key, byDefault);
         return byDefault;
-
     }
 
 
