@@ -2,9 +2,15 @@ package ru.mephi.java_course.lab1;
 
 import java.util.Objects;
 
+/**
+ * Класс словаря, основанный на разработанном списке MyList
+ */
 public class MyMap {
     private MyList list;
 
+    /**
+     * Класс пары "ключ-значение"
+     */
     public static class MapEntry {
         private Object key;
         private Object value;
@@ -31,30 +37,31 @@ public class MyMap {
         }
 
         @Override
-        public boolean equals(Object obj) {
-            return this.key == ((MapEntry) obj).key && this.value == ((MapEntry) obj).value;
-        }
-
-        @Override
         public String toString() {
             return "[ " + this.key + ": " + this.value + " ]";
         }
 
-        @Override
-        public int hashCode() {
-            return Objects.hash(key, value);
-        }
     }
 
-
+    /**
+     * Инициализация существующей мапой
+     * @param map
+     */
     public MyMap(MyMap map) {
         this.list = map.list;
     }
 
+    /**
+     * Инициализация массивом пар "ключ-значение"
+     * @param mapEntries
+     */
     public MyMap(MapEntry[] mapEntries) {
         this.list = new MyList(mapEntries);
     }
 
+    /**
+     * дефолтный конструктор
+     */
     public MyMap() {
         this.list = new MyList();
     }
@@ -68,15 +75,26 @@ public class MyMap {
         return builder.toString();
     }
 
+    /**
+     * Проверка, пуст ли список
+     * @return true, если список пуст
+     */
     public boolean isEmpty() {
         return list.isEmpty();
     }
 
+    /**
+     * Получение размера списка - количество пар "ключ-значение"
+     * @return
+     */
     public int size() {
         return list.size();
     }
 
-    //получить все ключи
+    /**
+     * Получение всех ключей
+     * @return ключи словаря
+     */
     public MyList getKeys() {
         MyList keysList = new MyList();
         for (Object keyItem : list.getItems()) {
@@ -87,28 +105,42 @@ public class MyMap {
         return keysList;
     }
 
-    //получить все значения
+    /**
+     * Получение всех значений
+     * @return значения словаря
+     */
     public MyList getValues() {
         MyList valuesList = new MyList();
         for (Object valueItem : this.list.getItems()) {
-            if (((MapEntry) valueItem).getValue() != null) {
+            if (valueItem instanceof MapEntry) {
                 valuesList.add(((MapEntry) valueItem).getValue());
             }
         }
         return valuesList;
     }
 
-    //получить все вхождения в мапу
+    /**
+     * Получение всех пар "ключ-значение"
+     * @return пара "ключ-значение"
+     */
     public MyList getEntries() {
         return list;
     }
 
-    //существует ли ключ
+    /**
+     * Проверка, существует ли значение в словаре по данному ключу
+     * @param key указанный ключ
+     * @return true, если есть значение по данному ключу
+     */
     public boolean keyContains(Object key) {
         return getKeys().contains(key);
     }
 
-    //получение по ключу
+    /**
+     * Получение соответсвующего значения по ключу
+     * @param key ключ
+     * @return найденное значение или null, если нет такого ключа в словаре
+     */
     public Object get(Object key) {
         if (keyContains(key)) {
             int indexOfValue = getKeys().indexOf(key);
@@ -128,7 +160,11 @@ public class MyMap {
         }
     }
 
-    //удаляем существующее значение
+    /**
+     * Удаление пары "ключ-значение" по ключу. Если такого ключа нет, то ничего не удаляется.
+     * @param key ключ удаляемой пары
+     * @return удаляемое значение, если такая пара есть, или null
+     */
     public Object remove(Object key) {
         if (keyContains(key)) {
             int indexOfValue = getKeys().indexOf(key);
@@ -139,7 +175,13 @@ public class MyMap {
         return null;
     }
 
-    //получаем существующее значение. если null - то кладем и возвращаем дефолтное значение
+    /**
+     * Получение значение, соответсвующее ключу.
+     * Если такого ключа нет в словаре, то возвращается значение по умолчанию, оно же кладется в словарь по данному ключу.
+     * @param key искомый ключ
+     * @param byDefault значение по умолчанию
+     * @return найденное значение (если есть такой ключ в словаре) или дефолтное значение
+     */
     public Object get(Object key, Object byDefault) {
         if (get(key) != null) return get(key);
 
