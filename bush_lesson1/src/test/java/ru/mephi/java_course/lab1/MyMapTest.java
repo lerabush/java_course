@@ -21,8 +21,8 @@ public class MyMapTest {
 
     @Before
     public void setUp() {
-        MyMap.MapEntry[] mapEntries = new MyMap.MapEntry[]{new MyMap.MapEntry(2, "Java"),
-                new MyMap.MapEntry(1, "hello")};
+        MapEntry[] mapEntries = new MapEntry[]{ new MapEntry(2, "Java"),
+                new MapEntry(1, "hello")};
         map = new MyMap(mapEntries);
 
     }//выполняется до каждого теста
