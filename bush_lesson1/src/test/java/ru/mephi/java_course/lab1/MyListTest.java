@@ -33,8 +33,9 @@ public class MyListTest {
         list.add("mephi");
         assertThat("There should be element 'mephi'", list.contains("mephi"), is(true));
         assertThat("Size doesn't equal to expected value: " + is(4), list.size(), is(4));
-        list.add("super", 3);
+        list.add("super", 2);
         assertThat("There should be element 'super'", list.contains("super"), is(true));
+        assertThat("Index of 'super' should be 2",list.indexOf("super"),is(2));
         assertThat("Size doesn't equal to expected value: " + is(5), list.size(), is(5));
 
     }
@@ -45,9 +46,6 @@ public class MyListTest {
         assertThat("There is an element 'world!': it is deleted", list.contains("world!"), is(false));
         assertThat("Size of list should be equal to expected value: " + is(2), list.size(), is(2));
         list.add("go");
-        list.remove("go");
-        assertThat("There is no element 'go': it was deleted", list.contains("go"), is(false));
-        assertThat("Size of list should be equal to expected value: " + is(2), list.size(), is(2));
         assertThat("There is no element with index 10",list.remove(10),is(nullValue()));
     }
 
@@ -55,7 +53,8 @@ public class MyListTest {
     public void whenSetNewValue()  {
         assertThat("The old value should be " + is("world!"), list.set("programmer!",1), is("world!"));
         assertThat("Size of list shouldn't change", list.size(), is(3));
-        assertThat("Old value should be null because it's out of bounds ",list.set("kotlin",10),is(nullValue()));
+        assertThat("Old value should be null because it's out of bounds ",list.set("kotlin",-20),is(nullValue()));
+        assertThat("There should be a new element 'kotlin' ",list.contains("kotlin"),is(true));
     }
 
     @Test
@@ -96,6 +95,7 @@ public class MyListTest {
         list.makeBigger();
         assertThat("New size is equal to 4",list.size(),is(4));
     }
+
     @After
     public void afterMethod() {
         System.out.println("OK");
