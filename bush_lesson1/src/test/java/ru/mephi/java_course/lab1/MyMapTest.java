@@ -46,6 +46,7 @@ public class MyMapTest {
         assertThat("The map does not contain key 4 ", map.keyContains(4), is(false));
         map.put(null, "java");
         assertThat("Map contains null key", map.keyContains(null), is(true));
+
     }
 
     @Test
@@ -92,6 +93,10 @@ public class MyMapTest {
         assertThat("The value should be: null", map.get("java-bro"), is(nullValue()));
         map.put(null, "java");
         assertThat("The value should be: java", map.get(null), is("java"));
+        map.put(null,"java");
+        map.put(null,"java");
+        System.out.println(map.toString());
+        assertThat("The size should be 4", map.size(),is(4));
 
     }
 
