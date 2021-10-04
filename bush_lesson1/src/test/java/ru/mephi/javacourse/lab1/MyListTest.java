@@ -1,7 +1,7 @@
-package ru.mephi.java_course.lab1;
+package ru.mephi.javacourse.lab1;
 
 import org.junit.*;
-import org.junit.rules.ExpectedException;
+
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

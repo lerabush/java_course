@@ -1,6 +1,4 @@
-package ru.mephi.java_course.lab1;
-
-import java.util.Objects;
+package ru.mephi.javacourse.lab1;
 
 /**
  * Класс словаря, основанный на разработанном списке MyList
@@ -51,7 +49,7 @@ public class MyMap {
 
     /**
      * Получение размера списка - количество пар "ключ-значение"
-     * @return
+     * @return true, если лист пустой
      */
     public int size() {
         return list.size();
@@ -142,13 +140,14 @@ public class MyMap {
     }
 
     /**
-     * Получение значение, соответсвующее ключу.
+     * Получение значение, соответствующее ключу.
      * Если такого ключа нет в словаре, то возвращается значение по умолчанию, оно же кладется в словарь по данному ключу.
      * @param key искомый ключ
      * @param byDefault значение по умолчанию
      * @return найденное значение (если есть такой ключ в словаре) или дефолтное значение
      */
-    public Object get(Object key, Object byDefault) {
+    public Object get(Object key,
+                      Object byDefault) {
         if (get(key) != null) return get(key);
 
         put(key, byDefault);

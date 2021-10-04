@@ -1,4 +1,4 @@
-package ru.mephi.java_course.lab1;
+package ru.mephi.javacourse.lab1;
 
 /*
  * Класс списка
