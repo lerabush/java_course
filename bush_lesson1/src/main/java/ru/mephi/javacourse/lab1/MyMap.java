@@ -4,7 +4,7 @@ package ru.mephi.javacourse.lab1;
  * Класс словаря, основанный на разработанном списке MyList
  */
 public class MyMap {
-    private MyList list;
+    private final MyList list;
 
 
     /**
@@ -34,7 +34,7 @@ public class MyMap {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         for (Object keyItem : list.getItems()) {
-            builder.append(((MapEntry) keyItem).toString() + "\n");
+            builder.append(keyItem.toString() + "\n");
         }
         return builder.toString();
     }

@@ -16,7 +16,5 @@ public class Task2 {
         }
         System.out.println(map2.toString());
     }
-    
+
 }
-
-
