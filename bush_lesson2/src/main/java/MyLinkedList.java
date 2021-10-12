@@ -245,15 +245,17 @@ public class MyLinkedList<T extends Comparable<T>> {
 
     public MyLinkedList<T> merge(MyLinkedList<T> otherList) {
         MyLinkedList<T> newList = new MyLinkedList<>();
-        int newLength = this.size()+otherList.size();
+        int newLength = this.size() + otherList.size();
         while (otherList.size() > 0 || this.size() > 0) {
             if (otherList.size() > 0 && this.size() > 0) {
                 if (this.get(0).compareTo(otherList.get(0)) > 0) {
                     newList.add(otherList.remove(0).getValue());
                 } else newList.add(this.remove(0).getValue());
-            } else if (this.size()!=0){
+            }
+            else if (this.size() != 0) {
                 newList.add(this.remove(0).getValue());
-            } else if (otherList.size()!=0){
+            }
+            else if (otherList.size() != 0) {
                 newList.add(otherList.remove(0).getValue());
             }
         }
@@ -275,9 +277,10 @@ public class MyLinkedList<T extends Comparable<T>> {
         secondList.add(60);
         secondList.add(130);
         MyLinkedList<Integer> newList = firstList.merge(secondList);
-        for(int i=0; i<newList.size();i++){
+        for (int i = 0; i < newList.size(); i++) {
             System.out.println(newList.get(i));
         }
+
     }
 
 }
