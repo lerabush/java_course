@@ -1,6 +1,7 @@
 import javax.annotation.processing.SupportedSourceVersion;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Employee {
 
@@ -15,26 +16,32 @@ public class Employee {
     private String state;
     private Long code;
     private Role role;
-
     private Gender gender;
+
     public Gender getGender() {
         return gender;
     }
-    public String getDept(){
+
+    public String getDept() {
         return dept;
     }
+
     public String getGivenName() {
         return givenName;
     }
+
     public String getSurname() {
         return surname;
     }
+
     public Integer getAge() {
         return age;
     }
+
     public Role getRole() {
         return role;
     }
+
     @Override
     public String toString() {
         return "Employee: " + givenName + " " + surname + ",age: "
@@ -44,69 +51,83 @@ public class Employee {
                 + ", " + city + ", " + state + ", " + code;
     }
 
-    /** Реализовываем паттерн Builder
-     *
+    /**
+     * Реализовываем паттерн Builder
      */
     public static class EmployeeBuilder {
 
         private Employee newEmployee;
 
-        public EmployeeBuilder(){
+        public EmployeeBuilder() {
             newEmployee = new Employee();
         }
-        public EmployeeBuilder setGivenName(String name){
+
+        public EmployeeBuilder setGivenName(String name) {
             newEmployee.givenName = name;
             return this;
         }
-        public EmployeeBuilder setSurname(String surname){
+
+        public EmployeeBuilder setSurname(String surname) {
             newEmployee.surname = surname;
             return this;
         }
-        public EmployeeBuilder setAddress(String address){
+
+        public EmployeeBuilder setAddress(String address) {
             newEmployee.address = address;
             return this;
         }
-        public EmployeeBuilder setAge(Integer age){
+
+        public EmployeeBuilder setAge(Integer age) {
             newEmployee.age = age;
             return this;
         }
-        public EmployeeBuilder setCity(String city){
+
+        public EmployeeBuilder setCity(String city) {
             newEmployee.city = city;
             return this;
         }
-        public EmployeeBuilder setPhone(String phone){
+
+        public EmployeeBuilder setPhone(String phone) {
             newEmployee.phone = phone;
             return this;
         }
-        public EmployeeBuilder setDepartment(String department){
+
+        public EmployeeBuilder setDepartment(String department) {
             newEmployee.dept = department;
             return this;
         }
-        public EmployeeBuilder setEmail(String email){
+
+        public EmployeeBuilder setEmail(String email) {
             newEmployee.email = email;
             return this;
         }
-        public EmployeeBuilder setState(String state){
+
+        public EmployeeBuilder setState(String state) {
             newEmployee.state = state;
             return this;
         }
-        public EmployeeBuilder setCode(Long code){
+
+        public EmployeeBuilder setCode(Long code) {
             newEmployee.code = code;
             return this;
         }
-        public EmployeeBuilder setRole(Role role){
+
+        public EmployeeBuilder setRole(Role role) {
             newEmployee.role = role;
             return this;
         }
-        public EmployeeBuilder setGender(Gender gender){
+
+        public EmployeeBuilder setGender(Gender gender) {
             newEmployee.gender = gender;
             return this;
         }
-        public Employee build(){
+
+        public Employee build() {
             return newEmployee;
         }
     }
-    public static List<Employee> createShortList(){
+
+    public static List<Employee> createShortList() {
         List<Employee> employees = new ArrayList<>();
         employees.add(new EmployeeBuilder()
                 .setGivenName("Mark")
@@ -208,11 +229,57 @@ public class Employee {
                 .build());
         return employees;
     }
-    public static void main(String[] args){
-        Employee emp = new Employee.EmployeeBuilder()
+
+    public static void main(String[] args) {
+        Employee empMe = new Employee.EmployeeBuilder()
                 .setGivenName("Valery")
-                .setSurname("Bushueva").build();
-        System.out.println(emp.toString());
+                .setSurname("Bushueva").setAge(20)
+                .setDepartment("IT")
+                .setRole(Role.MANAGER)
+                .setAddress("Sunny St 45")
+                .setCity("San-Fransisco")
+                .setCode(5362346L)
+                .setPhone("95-177-272-74")
+                .setEmail("v.bushuyeva@gmail.com")
+                .setGender(Gender.FEMALE)
+                .setState("Moscow").build();
+        Employee empYou = new Employee.EmployeeBuilder()
+                .setGivenName("Mark")
+                .setSurname("Green").setAge(40)
+                .setDepartment("IT")
+                .setRole(Role.EXECUTIVE)
+                .setAddress("Sunny St 45")
+                .setCity("San-Fransisco")
+                .setCode(5362346L)
+                .setPhone("95-177-272-74")
+                .setEmail("markamark@gmail.com")
+                .setGender(Gender.MALE)
+                .setState("Moscow").build();
+
+        //Consumer
+        Integer addedSum = 5000;
+        ConsumerLambdaExpression increase = (emp, sum) -> emp.getRole()
+                .setSalary(emp.getRole().getSalary() + sum);
+        increase.increaseSalary(empMe, addedSum);
+        System.out.println(empMe.getRole().getSalary());
+
+        //Supplier
+        SupplierLambdaExpression supplier = () -> {
+            List<Employee> employees = createShortList();
+            return employees.stream().map(Employee::toString).collect(Collectors.toList());
+        };
+        System.out.println(supplier.getInfoAboutWorkers());
+
+        //BiPredicate
+        BiPredicateLambdaExpression isOlder = (emp1,emp2)->emp1.getAge()>emp2.getAge();
+        System.out.println(isOlder.isOlder(empMe,empYou));
+
+        //Function
+
+        FunctionLambdaExpression convertIntoEuro = (emp1,sum)->emp1.getRole().getSalary()/sum;
+        for(Employee emp:createShortList()){
+            System.out.println(convertIntoEuro.getSalaryInEuro(emp,1.16));
+        }
     }
 
 }

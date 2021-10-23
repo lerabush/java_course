@@ -6,17 +6,17 @@ import java.util.function.Predicate;
  */
 public class Accountant {
     public void paySalary(Employee employee){
-        System.out.println("Payed 3000$ to employee "+employee.toString());
+        System.out.println("Payed "+employee.getRole().getSalary()+ "$ to employee "+employee.toString());
     }
     public void payPremium(Employee employee){
         if(employee.getRole()==Role.STAFF){
-            System.out.println("Payed 300$ to employee "+employee.toString());
+            System.out.println("Payed "+employee.getRole().getSalary()*employee.getRole().getPercent()+ "$ to employee "+employee.toString());
         }
         else if(employee.getRole()==Role.MANAGER){
-            System.out.println("Payed 600$ to employee "+employee.toString());
+            System.out.println("Payed "+employee.getRole().getSalary()*employee.getRole().getPercent()+ "$ to employee "+employee.toString());
         }
         else if(employee.getRole()==Role.EXECUTIVE){
-            System.out.println("Payed 900$ to employee "+employee.toString());
+            System.out.println("Payed "+employee.getRole().getSalary()*employee.getRole().getPercent()+ "$ to employee "+employee.toString());
         }
     }
     public static void main(String[] args){
