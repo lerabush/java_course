@@ -1,6 +1,8 @@
 import javax.annotation.processing.SupportedSourceVersion;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class Employee {
@@ -17,6 +19,11 @@ public class Employee {
     private Long code;
     private Role role;
     private Gender gender;
+
+
+    private Employee() {
+
+    }
 
     public Gender getGender() {
         return gender;
@@ -231,6 +238,7 @@ public class Employee {
     }
 
     public static void main(String[] args) {
+
         Employee empMe = new Employee.EmployeeBuilder()
                 .setGivenName("Valery")
                 .setSurname("Bushueva").setAge(20)
@@ -258,27 +266,80 @@ public class Employee {
 
         //Consumer
         Integer addedSum = 5000;
-        ConsumerLambdaExpression increase = (emp, sum) -> emp.getRole()
-                .setSalary(emp.getRole().getSalary() + sum);
-        increase.increaseSalary(empMe, addedSum);
-        System.out.println(empMe.getRole().getSalary());
+        ConsumerLambdaExpression<Employee> printInfoEmployee = e -> System.out.println("\nName: " +
+                e.getGivenName() + "\nSurname: "+e.getSurname()+"\n Age: "+e.getAge()+
+                "\n Role: "+e.getRole()+"\n Salary: "+e.getRole().getSalary());
+        printInfoEmployee.accept(empMe);
+
+        Predicate<Employee> employeePredicate = (emp) -> emp.getRole().equals(Role.STAFF);
 
         //Supplier
-        SupplierLambdaExpression supplier = () -> {
-            List<Employee> employees = createShortList();
-            return employees.stream().map(Employee::toString).collect(Collectors.toList());
-        };
-        System.out.println(supplier.getInfoAboutWorkers());
+        SupplierLambdaExpression<Employee> supplier = () -> {
+            System.out.println("Creating new employee");
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Name: ");
+            String name = scanner.next();
+            System.out.println("Surname: ");
+            String surname = scanner.next();
+            System.out.println("Age: ");
+            Integer age = scanner.nextInt();
+            System.out.println("Gender: ");
+            Gender gender = null;
+            if(scanner.next().equals("Female")){
+                 gender = Gender.FEMALE;
+            }
+            else gender = Gender.MALE;
+            System.out.println("Role (Executive, Manager, Stuff): ");
+            Role role = null;
+            String roleStr = scanner.next();
+            if(roleStr.equals("Executive")){
+                role = Role.EXECUTIVE;
+            }
+            else if(roleStr.equals("Staff")){
+                role = Role.STAFF;
+            }
+            else {
+                role = Role.MANAGER;
+            }
+            System.out.println("Department: ");
+            String dept = scanner.next();
+            System.out.println("State: ");
+            String state = scanner.next();
+            System.out.println("City: ");
+            String city = scanner.next();
+            System.out.println("Code: ");
+            Long code = scanner.nextLong();
+            System.out.println("Address: ");
+            String address = scanner.next();
+            System.out.println("Email: ");
+            String email = scanner.next();
+            System.out.println("Phone: ");
+            String phone = scanner.next();
+            return new Employee.EmployeeBuilder()
+                    .setGivenName(name)
+                    .setSurname(surname)
+                    .setAge(age)
+                    .setRole(role)
+                    .setDepartment(dept)
+                    .setGender(gender)
+                    .setPhone(phone)
+                    .setEmail(email)
+                    .setCode(code)
+                    .setCity(city)
+                    .setState(state)
+                    .setAddress(address).build();
 
+        };
+       printInfoEmployee.accept(supplier.get());
         //BiPredicate
-        BiPredicateLambdaExpression isOlder = (emp1,emp2)->emp1.getAge()>emp2.getAge();
-        System.out.println(isOlder.isOlder(empMe,empYou));
+        BiPredicateLambdaExpression<Employee,Employee> isOlder = (emp1, emp2) -> emp1.getAge() > emp2.getAge();
+        System.out.println(isOlder.test(empMe, empYou));
 
         //Function
 
-        FunctionLambdaExpression convertIntoEuro = (emp1,sum)->emp1.getRole().getSalary()/sum;
-        for(Employee emp:createShortList()){
-            System.out.println(convertIntoEuro.getSalaryInEuro(emp,1.16));
+        FunctionLambdaExpression<Employee,Double> convertIntoEuro = (emp1) -> emp1.getRole().getSalary() /1.16;
+        for (Employee emp : createShortList()) {
+            System.out.println(convertIntoEuro.apply(emp));
         }
     }
 
