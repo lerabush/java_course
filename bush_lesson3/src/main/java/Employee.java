@@ -1,5 +1,6 @@
 import javax.annotation.processing.SupportedSourceVersion;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -236,6 +237,74 @@ public class Employee {
                 .build());
         return employees;
     }
+    public String getShortInfo(){
+       return getGivenName() + " " + getSurname() + " " + getAge();
+    }
+
+    public static void firstExample(List<Employee> list) {
+        //получим средний возраст женщин сотрудников, при этом печатаем их
+        System.out.println("\n Women");
+        Double averageAge = list.stream().filter(x -> x.getGender() == Gender.FEMALE)
+                .peek(e -> System.out.println(e.getShortInfo()))
+                .mapToInt(Employee::getAge).average().getAsDouble();
+        System.out.println(averageAge);
+        //Находим самого старшего сотрудника IT
+        System.out.println("\n The oldest in IT");
+        Employee oldestInIT = list.stream().filter(x -> x.getDept().equals("IT"))
+                .max(Comparator.comparing(Employee::getAge)).get();
+        System.out.println(oldestInIT.getShortInfo());
+
+        //Находим самого младшего сотрудника IT
+        System.out.println("\n The youngest in IT");
+        Employee youngestInIT = list.stream().filter(x -> x.getDept()
+                .equals("IT")).min(Comparator.comparing(Employee::getAge)).get();
+        System.out.println(youngestInIT.getShortInfo());
+
+        //Находим первого менеджера
+        System.out.println("\n First manager");
+        Employee emp = list.stream().filter(x -> x.getRole() == Role.MANAGER).findFirst().get();
+        System.out.println(emp.getShortInfo());
+
+        //Считаем количество сотрудников, которым не больше 30 и выводим их
+        System.out.println("\nUnder 30");
+        System.out.println(list.stream().filter(x -> x.getAge() < 30)
+                .peek(e -> System.out.println(e.getGivenName() + " " + e.getSurname())).count());
+
+        //Cчитаем сумму их зарплат
+        System.out.println("\n SUM");
+        System.out.println(list.stream().filter(x -> x.getAge() < 30).map(Employee::getRole).mapToInt(Role::getSalary).sum());
+    }
+
+    public static void secondExample(List<Employee> list) {
+        //повышаем всем зарплату на 10%, выводим
+        System.out.println("\nIncrease salary 10%!!!");
+        System.out.println(list.stream().peek(e->e.increaseSalary(0.1))
+                .map(Employee::getRole).mapToInt(Role::getSalary));
+        //Находим первого сотрудника из Нью-Йорка
+        System.out.println("\nFirst employee from New York ");
+        System.out.println(list.stream().filter(x->x.city.equals("New York")).findFirst().get().getShortInfo());
+        //Находим средний возраст мужчин-сотрудников, но через sum/count
+        System.out.println("\nAverage age (men) ");
+        Long numOfMen = list.stream().filter(x->x.getGender()==Gender.MALE).count();
+        Integer sumOfAgesMen = list.stream().filter(x->x.getGender()==Gender.MALE).mapToInt(Employee::getAge).sum();
+        Integer averageAge = Math.toIntExact(sumOfAgesMen / numOfMen);
+        System.out.println(averageAge);
+        //Приветсвие!
+        System.out.println("\nSay Hello!");
+        list.stream().forEach(e->System.out.println("Hello, "+e.getGivenName()+"!"));
+        //Сортируем по возрасту сотрудников Retail
+        System.out.println("\nSorting by age");
+        list.stream().filter(x->x.getDept().equals("Retail"))
+                .sorted(Comparator.comparing(Employee::getAge)).forEach(x->System.out.println(x.getShortInfo()));
+        //Находим минимальную зарплату в IT отделе (потому что мы можем изменить реализацию,
+        // где не будет фиксированной зарплаты у ролей)
+        System.out.println("Min salary in IT");
+        System.out.println(list.stream().filter(x->x.getDept().equals("IT")).map(x->x.getRole().getSalary()).min(Integer::compareTo).get().intValue());
+
+    }
+    void increaseSalary(Double procent){
+        this.getRole().setSalary((int) (this.getRole().getSalary()*(1+procent)/100));
+    }
 
     public static void main(String[] args) {
 
@@ -267,8 +336,8 @@ public class Employee {
         //Consumer
         Integer addedSum = 5000;
         ConsumerLambdaExpression<Employee> printInfoEmployee = e -> System.out.println("\nName: " +
-                e.getGivenName() + "\nSurname: "+e.getSurname()+"\n Age: "+e.getAge()+
-                "\n Role: "+e.getRole()+"\n Salary: "+e.getRole().getSalary());
+                e.getGivenName() + "\nSurname: " + e.getSurname() + "\n Age: " + e.getAge() +
+                "\n Role: " + e.getRole() + "\n Salary: " + e.getRole().getSalary());
         printInfoEmployee.accept(empMe);
 
         Predicate<Employee> employeePredicate = (emp) -> emp.getRole().equals(Role.STAFF);
@@ -285,20 +354,17 @@ public class Employee {
             Integer age = scanner.nextInt();
             System.out.println("Gender: ");
             Gender gender = null;
-            if(scanner.next().equals("Female")){
-                 gender = Gender.FEMALE;
-            }
-            else gender = Gender.MALE;
+            if (scanner.next().equals("Female")) {
+                gender = Gender.FEMALE;
+            } else gender = Gender.MALE;
             System.out.println("Role (Executive, Manager, Stuff): ");
             Role role = null;
-            String roleStr = scanner.next();
-            if(roleStr.equals("Executive")){
+            String roleStr = scanner.next().trim();
+            if (roleStr.equals("Executive")) {
                 role = Role.EXECUTIVE;
-            }
-            else if(roleStr.equals("Staff")){
+            } else if (roleStr.equals("Staff")) {
                 role = Role.STAFF;
-            }
-            else {
+            } else {
                 role = Role.MANAGER;
             }
             System.out.println("Department: ");
@@ -330,14 +396,14 @@ public class Employee {
                     .setAddress(address).build();
 
         };
-       printInfoEmployee.accept(supplier.get());
+        printInfoEmployee.accept(supplier.get());
         //BiPredicate
-        BiPredicateLambdaExpression<Employee,Employee> isOlder = (emp1, emp2) -> emp1.getAge() > emp2.getAge();
+        BiPredicateLambdaExpression<Employee, Employee> isOlder = (emp1, emp2) -> emp1.getAge() > emp2.getAge();
         System.out.println(isOlder.test(empMe, empYou));
 
         //Function
 
-        FunctionLambdaExpression<Employee,Double> convertIntoEuro = (emp1) -> emp1.getRole().getSalary() /1.16;
+        FunctionLambdaExpression<Employee, Double> convertIntoEuro = (emp1) -> emp1.getRole().getSalary() / 1.16;
         for (Employee emp : createShortList()) {
             System.out.println(convertIntoEuro.apply(emp));
         }
