@@ -8,8 +8,8 @@ public class Task2 {
 
     public static void timeZoneExamples() {
         ZoneId BLR = ZoneId.of("Asia/Calcutta");
-        ZoneId SFO = ZoneId.of("America/New_York");
-        ZoneId BOS = ZoneId.of("America/Los_Angeles");
+        ZoneId BOS = ZoneId.of("America/New_York");
+        ZoneId SFO = ZoneId.of("America/Los_Angeles");
 
         //Flight 123, San Francisco to  Boston, leaves SFO at 10:30 PM June 13, 2014
         // The flight is 5 hours 30 minutes

@@ -6,7 +6,6 @@ import java.util.List;
 
 public class ExceptionsExample {
     public static <T> void processIndexOutOfBounds(List<T> list, Integer index) throws IndexOutOfBoundsException {
-        System.out.println("\nIndex is out of bounds processing");
         try {
             System.out.println(list.get(index));
         } catch (IndexOutOfBoundsException e) {
@@ -76,7 +75,6 @@ public class ExceptionsExample {
     }
     public static void stackOverFlow(){
           stackOverFlow();
-
     }
     public static void processClassCast(Animal animal) throws ClassCastException{
         try{

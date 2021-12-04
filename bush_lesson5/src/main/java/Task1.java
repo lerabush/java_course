@@ -72,7 +72,7 @@ public class Task1 {
         //   If the train was delayed 1 hour 19 minutes, what is the actual arrival time?
         System.out.println("Number 3");
         LocalTime timeDepart = LocalTime.of(13, 45);
-        LocalTime timeArrival = LocalTime.of(19, 45);
+        LocalTime timeArrival = LocalTime.of(19, 25);
         System.out.println(Duration.between(timeDepart, timeArrival).toMinutes());
         System.out.println(timeArrival.plusHours(1).plusMinutes(19));
         // Flight: Boston to Miami, leaves March 24th 9:15PM. Flight time is 4 hours 15 minutes
