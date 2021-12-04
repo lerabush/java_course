@@ -3,7 +3,6 @@ import java.time.LocalDateTime;
 
 public class Task2 {
 
-
     public static void fillCart(ShoppingCart myCart,Item[] items) {
         for (Item item : items) {
             myCart.putItem(item);
